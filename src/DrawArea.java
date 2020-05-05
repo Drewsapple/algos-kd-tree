@@ -16,12 +16,10 @@ public class DrawArea extends JPanel {
 
     private void drawPoints(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.black);
         for(Point p : m.points) {
             Dimension d = this.getSize();
-
-            int x = (int) (d.width * p.x);
-            int y = (int) (d.height * p.y);
-            g2d.drawLine(x, y, x, y);
+            g2d.fillRect(p.x-1, p.y-1, 2,2);
         }
     }
 

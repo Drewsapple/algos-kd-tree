@@ -18,7 +18,6 @@ public class kdTreeViewer extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 drawArea.pointClicked(e.getPoint());
-                System.out.printf("Point Clicked at (%d, %d) \n", e.getX(), e.getY());
                 repaint();
             }
         });
