@@ -36,15 +36,20 @@ public class KDTree {
 
 	private KDNode nearestNode(KDNode node, double x,double y,KDNode nearest) {
 		boolean bigger = biggerThanNode(node,x,y);
+
 		double nearestDistance = getDistance(nearest,x,y);
+
+		System.out.println("nearest: " + nearestDistance + " " + node.pt.x + " " + node.pt.y);
 		if (bigger && node.bigger != null) {
+			System.out.println("bigger: " + getDistance(node.bigger,x,y));
 			if (nearestDistance > getDistance(node.bigger,x,y)) {
 				return nearestNode(node.bigger,x,y,node.bigger);
 			} else {
 				return nearestNode(node.bigger,x,y,nearest);
 			}
 		} else if (!bigger && node.smaller != null) {
-			if (nearestDistance > getDistance(node.bigger,x,y)) {
+			System.out.println("smaller: " + getDistance(node.smaller,x,y));
+			if (nearestDistance > getDistance(node.smaller,x,y)) {
 				return nearestNode(node.smaller,x,y,node.smaller);
 			} else {
 				return nearestNode(node.smaller,x,y,nearest);
@@ -55,6 +60,8 @@ public class KDTree {
 	}
 
 	private double getDistance(KDNode node,double x,double y) {
+    	System.out.println((node.pt.x - x));
+		System.out.println((node.pt.y - y));
     	return Math.sqrt((node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y));
 	}
 

@@ -34,7 +34,7 @@ public class kdTreeViewer extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                System.out.println("Mouse moved");
+                //System.out.println("Mouse moved");
                 int width = drawArea.getSize().width;
                 int height = drawArea.getSize().height;
                 Point mouse = e.getPoint();

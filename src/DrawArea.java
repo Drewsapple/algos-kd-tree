@@ -36,7 +36,7 @@ public class DrawArea extends JPanel {
         g2d.setColor(Color.black);
         int width = getSize().width;
         int height = getSize().height;
-        System.out.printf("Window: width: %d height: %d \n", width, height);
+        //System.out.printf("Window: width: %d height: %d \n", width, height);
         ArrayList<Line2D.Double> lines = m.tree.lines();
         for(Line2D.Double l :lines) {
             g2d.drawLine((int)(l.x1*width), (int)(l.y1*height), (int)(l.x2*width), (int)(l.y2*height));
@@ -49,7 +49,8 @@ public class DrawArea extends JPanel {
         int width = getSize().width;
         int height = getSize().height;
         Point2D.Double mouse = m.mousePoint;
-        Point2D.Double nearest = m.tree.root.pt; // TODO: replace with result of nearest neighbor query
+
+        Point2D.Double nearest = m.tree.nearestNode(mouse.x ,mouse.y ).pt; // TODO: replace with result of nearest neighbor query
         g2d.drawLine((int)(mouse.x*width), (int)(mouse.y*height), (int)(nearest.x*width), (int)(nearest.y*height));
     }
 }
