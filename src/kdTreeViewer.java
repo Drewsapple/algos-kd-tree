@@ -9,7 +9,7 @@ public class kdTreeViewer extends JFrame {
     static int HORIZONTAL_WINDOW_SIZE = 400;
     static int VERTICAL_WINDOW_SIZE = 400;
 
-    public kdTreeViewer(Model m, KDTree t){
+    public kdTreeViewer(Model m){
         drawArea = new DrawArea(m);
         add(drawArea);
         setSize(HORIZONTAL_WINDOW_SIZE,VERTICAL_WINDOW_SIZE);
@@ -22,25 +22,16 @@ public class kdTreeViewer extends JFrame {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 Point newPoint = e.getPoint();
-                KDNode justAdded = t.add(newPoint.x, newPoint.y);
-                Line2D.Double line;
-                if(justAdded.orientation) {
-                	 line = new Line2D.Double(justAdded.pt.x, justAdded.pt.x, justAdded.r.min.y, justAdded.r.max.y);
-                }
-                else {
-                	 line = new Line2D.Double(justAdded.r.min.x, justAdded.r.max.x, justAdded.pt.y, justAdded.pt.y);
-                }
+                m.tree.add(newPoint.x, newPoint.y);
                 drawArea.pointClicked(newPoint);
-                drawArea.lineAdded(line);
                 repaint();
             }
         });
     }
 
     public static void main(String[] args) {
-    	KDTree tree = new KDTree();
         Model m = new Model();
-        kdTreeViewer k = new kdTreeViewer(m, tree);
+        kdTreeViewer k = new kdTreeViewer(m);
         k.setVisible(true);
     }
 }

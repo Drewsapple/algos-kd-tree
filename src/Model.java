@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public class Model {
 	
-    public KDNode root;
+    public KDTree tree;
     public ArrayList<Point> points;
-    public ArrayList<Line2D.Double> lines;
 
     public Model(){
+        tree = new KDTree();
         points = new ArrayList<Point>();
-        lines = new ArrayList<Line2D.Double> ();
     }
 
     public boolean addPoint(Point p){
@@ -19,16 +18,6 @@ public class Model {
         }
         else {
             points.add(p);
-            return true;
-        }
-    }
-    
-    public boolean addLine(Line2D.Double l) {
-    	if(lines.contains(l)) {
-            return false;
-        }
-        else {
-            lines.add(l);
             return true;
         }
     }

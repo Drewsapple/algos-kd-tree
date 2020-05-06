@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 public class KDTree {
 	//In which direction the Node divides the plot (in which direction we draw the line)
@@ -7,6 +9,7 @@ public class KDTree {
     public KDTree(){
 
     }
+
     /**
      * Adds a point with coords x and y to our KDTree
      * @param x
@@ -15,60 +18,46 @@ public class KDTree {
      */
     public KDNode add(int x, int y) {
         if(this.root == null) {
-            root = new KDNode(x,y,true , new Region());
-            return root;}
+            root = new KDNode(x,y, Orientation.VERTICAL, new Region());
+            return root;
+        }
         else {
         	return add(this.root, x, y);
         }
     }
-    
+
+	/**
+	 * Adds a point with coords x and y to our KDTree as a child of a specific node
+	 * @param parentNode
+	 * @param x
+	 * @param y
+	 * @return return the node that was just added
+	 */
     public KDNode add(KDNode parentNode, int x, int y) {
     	boolean bigger = biggerThanNode(parentNode,x,y);
-    	
+		Region newRegion = parentNode.getSubRegion(bigger);
+		KDNode nodeAdded;
     	//base case checks if a new node is to be added
     	//it checks whether the bigger and smaller subTrees are null and checks if the corresponding
     	//coordinate justifies adding the new point as the bigger or smaller subtree
     	if (bigger && parentNode.bigger == null) {
-    		Region newRegion;
-    		if (parentNode.orientation) {			//if orentation of parent was vertical
-    			//only xmin changes
-    			newRegion = new Region(parentNode.pt.x,parentNode.r.min.y,
-    									parentNode.r.max.x,parentNode.r.max.y);
-    		}
-    		else {									//else if orientation of parent is horizontal
-    			//only ymin changes
-    			newRegion = new Region(parentNode.r.min.x,parentNode.pt.y,
-						parentNode.r.max.x,parentNode.r.max.y);
-    		}
-    		KDNode nodeAdded = new KDNode(x,y, !parentNode.orientation, newRegion);
+    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
     		parentNode.bigger = nodeAdded;
     		return nodeAdded;
     	}
     	else if (!bigger && parentNode.smaller == null) {
-    		Region newRegion;
-    		if (parentNode.orientation) {			//if orentation of parent was vertical
-    			//only xmax changes
-    			newRegion = new Region(parentNode.r.min.x,parentNode.r.min.y,
-    									parentNode.pt.x,parentNode.r.max.y);
-    		}
-    		else {									//else if orientation of parent is horizontal
-    			//only ymax changes
-    			newRegion = new Region(parentNode.r.min.x,parentNode.r.min.y,
-    									parentNode.r.max.x,parentNode.pt.y);
-    		}
-    		KDNode nodeAdded = new KDNode(x,y, !parentNode.orientation, newRegion);
+    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
     		parentNode.smaller = nodeAdded;
     		return nodeAdded;
-    		}		// that was the base case in which we actually add a new node
+		}
     	
     	// now to the recursive case:
     	// we just have to see to which on which subtree to call the recursion on 
     	if (bigger) {			
-    		return(add(parentNode.bigger, x, y));
-
+    		return add(parentNode.bigger, x, y);
     	}
     	else {
-    		return(add(parentNode.smaller,x, y));
+    		return add(parentNode.smaller,x, y);
     	}
     }
     
@@ -78,13 +67,63 @@ public class KDTree {
      * respect to the orientation of the node
      */
     public boolean biggerThanNode(KDNode n, int x, int y) {
-    	if (!n.orientation) {							//if the orientation is horizontal
-    		if (y > n.pt.y) {return true;}				//return bigger aka true
+		int newValue, existingValue;
+    	if (n.orientation == Orientation.HORIZONTAL) {
+			newValue = y;
+			existingValue = n.pt.y;
     	}
-    	else {											//otherwise the orientation is vertical
-    		if (x > n.pt.x) {return true;}				//return bigger aka false
-    	}					
-    	return false; 									//return smaller aka false
+    	else {
+			newValue = x;
+			existingValue = n.pt.x;
+    	}
+
+		if (newValue > existingValue) {
+			return true;
+		}
+		else {
+			return false;
+		}
     }
 
+    public Orientation flipOrientation(Orientation o) {
+    	if(o == Orientation.HORIZONTAL){
+    		return Orientation.VERTICAL;
+		}
+    	else {
+    		return Orientation.HORIZONTAL;
+		}
+	}
+
+	public ArrayList<Point> points() {
+		ArrayList<Point> points = new ArrayList<Point>();
+		points = points(root, points);
+		return points;
+	}
+
+	public ArrayList<Point> points(KDNode n, ArrayList<Point> points ) {
+    	if(n != null) {
+			points = points(n.smaller, points);
+			points.add(n.pt);
+			points = points(n.bigger, points);
+		}
+		return points;
+	}
+
+	public ArrayList<Line2D.Double> lines() {
+		ArrayList<Line2D.Double> lines = new ArrayList<Line2D.Double>();
+		lines = lines(root, lines);
+		return lines;
+	}
+
+	public ArrayList<Line2D.Double> lines(KDNode n, ArrayList<Line2D.Double> lines ) {
+		if(n != null) {
+			lines = lines(n.smaller, lines);
+			if(n.orientation == Orientation.VERTICAL)
+				lines.add(new Line2D.Double(n.pt.x, n.r.min.y, n.pt.x, n.r.max.y));
+			else // if horizontal
+				lines.add(new Line2D.Double(n.r.min.x, n.pt.y, n.r.max.x, n.pt.y));
+			lines = lines(n.bigger, lines);
+		}
+		return lines;
+	}
 }
