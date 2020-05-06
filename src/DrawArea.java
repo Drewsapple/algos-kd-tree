@@ -16,6 +16,8 @@ public class DrawArea extends JPanel {
         super.paintComponent(g);
         drawPoints(g);
         drawLines(g);
+        if(m.tree.root != null && m.mousePoint != null)
+            drawNearestLine(g);
     }
 
     private void drawPoints(Graphics g) {
@@ -41,8 +43,13 @@ public class DrawArea extends JPanel {
         }
     }
 
-    public void pointClicked(Point p) {
-        Dimension d = this.getSize();
-        m.addPoint(p);
+    private void drawNearestLine(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.black);
+        int width = getSize().width;
+        int height = getSize().height;
+        Point2D.Double mouse = m.mousePoint;
+        Point2D.Double nearest = m.tree.root.pt; // TODO: replace with result of nearest neighbor query
+        g2d.drawLine((int)(mouse.x*width), (int)(mouse.y*height), (int)(nearest.x*width), (int)(nearest.y*height));
     }
 }
