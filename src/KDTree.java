@@ -30,32 +30,31 @@ public class KDTree {
     	if (this.root == null) {
     		return null;
 		} else {
-    		return nearestNode(this.root,x,y,this.root);
+    		return nearestNode(this.root,x,y);
 		}
 	}
 
-	private KDNode nearestNode(KDNode node, double x,double y,KDNode nearest) {
-		boolean bigger = biggerThanNode(node,x,y);
-
-		double nearestDistance = getDistance(nearest,x,y);
-
-		System.out.println("nearest: " + nearestDistance + " " + node.pt.x + " " + node.pt.y);
-		if (bigger && node.bigger != null) {
-			System.out.println("bigger: " + getDistance(node.bigger,x,y));
-			if (nearestDistance > getDistance(node.bigger,x,y)) {
-				return nearestNode(node.bigger,x,y,node.bigger);
-			} else {
-				return nearestNode(node.bigger,x,y,nearest);
-			}
-		} else if (!bigger && node.smaller != null) {
-			System.out.println("smaller: " + getDistance(node.smaller,x,y));
-			if (nearestDistance > getDistance(node.smaller,x,y)) {
-				return nearestNode(node.smaller,x,y,node.smaller);
-			} else {
-				return nearestNode(node.smaller,x,y,nearest);
-			}
+	private KDNode nearestNode(KDNode node, double x,double y) {
+		double distance = getDistance(node,x,y);
+		KDNode biggerNode = null;
+		double biggerDistance = Double.MAX_VALUE;
+		KDNode smallerNode = null;
+		double smallerDistance = Double.MAX_VALUE;
+		if (node.bigger != null) {
+			biggerNode = nearestNode(node.bigger,x,y);
+			biggerDistance = getDistance(biggerNode,x,y);
+			//System.out.println("bigger: " + getDistance(node.bigger,x,y));
+		}
+		if (node.smaller != null) {
+			smallerNode = nearestNode(node.smaller,x,y);
+			smallerDistance = getDistance(smallerNode,x,y);
+		}
+		if (smallerDistance < biggerDistance && smallerDistance < distance) {
+			return smallerNode;
+		} else if (biggerDistance < distance && biggerDistance < smallerDistance) {
+			return biggerNode;
 		} else {
-			return nearest;
+			return node;
 		}
 	}
 
@@ -81,6 +80,7 @@ public class KDTree {
     	//base case checks if a new node is to be added
     	//it checks whether the bigger and smaller subTrees are null and checks if the corresponding
     	//coordinate justifies adding the new point as the bigger or smaller subtree
+
     	if (bigger && parentNode.bigger == null) {
     		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
     		parentNode.bigger = nodeAdded;
