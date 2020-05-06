@@ -59,8 +59,8 @@ public class KDTree {
 	}
 
 	private double getDistance(KDNode node,double x,double y) {
-    	System.out.println((node.pt.x - x));
-		System.out.println((node.pt.y - y));
+    	//System.out.println((node.pt.x - x));
+		//System.out.println((node.pt.y - y));
     	return Math.sqrt((node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y));
 	}
 
