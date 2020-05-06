@@ -34,34 +34,63 @@ public class KDTree {
 		}
 	}
 
-	private KDNode nearestNode(KDNode node, double x,double y) {
-		double distance = getDistance(node,x,y);
-		KDNode biggerNode = null;
-		double biggerDistance = Double.MAX_VALUE;
-		KDNode smallerNode = null;
-		double smallerDistance = Double.MAX_VALUE;
-		if (node.bigger != null) {
-			biggerNode = nearestNode(node.bigger,x,y);
-			biggerDistance = getDistance(biggerNode,x,y);
-			//System.out.println("bigger: " + getDistance(node.bigger,x,y));
+	private KDNode nearestNode(KDNode root, double x, double y) {
+		if (root == null) {
+			return null;
 		}
-		if (node.smaller != null) {
-			smallerNode = nearestNode(node.smaller,x,y);
-			smallerDistance = getDistance(smallerNode,x,y);
+		
+		double rootDistance = getDistanceSqr(root, x, y);
+		KDNode closerNode = null;
+		KDNode fartherNode = null;
+		
+		double biggerDistance = getDistanceSqr(root.bigger, x, y);
+		double smallerDistance = getDistanceSqr(root.smaller, x, y);
+		double closerDistance = Math.min(biggerDistance, smallerDistance);
+		
+		if (closerDistance == biggerDistance) {
+			closerNode = root.bigger;
+			fartherNode = root.smaller;
 		}
-		if (smallerDistance < biggerDistance && smallerDistance < distance) {
-			return smallerNode;
-		} else if (biggerDistance < distance && biggerDistance < smallerDistance) {
-			return biggerNode;
-		} else {
-			return node;
+		else {
+			closerNode = root.smaller;
+			fartherNode = root.bigger;
 		}
+		
+		closerNode = nearestNode(closerNode, x, y);
+		closerDistance = getDistanceSqr(closerNode, x, y);
+		if (rootDistance <= closerDistance) {
+			closerDistance = rootDistance;
+			closerNode = root;
+		}
+		
+		if (closerDistance <= getDistanceSqrToPartition(root, x, y)) {
+			return closerNode;
+		}
+		
+		fartherNode = nearestNode(fartherNode, x, y);
+		if (closerDistance <= getDistanceSqr(fartherNode, x, y)) {
+			return closerNode;
+		}
+		return fartherNode;
+	}
+	
+	private double getDistanceSqrToPartition(KDNode root, double x, double y) {
+		if (root == null) {
+			return Double.MAX_VALUE;
+		}
+		if (root.orientation == Orientation.VERTICAL) {
+			return (root.pt.x - x)*(root.pt.x - x);
+		}
+		return (root.pt.y - y)*(root.pt.y - y);
 	}
 
-	private double getDistance(KDNode node,double x,double y) {
+	private double getDistanceSqr(KDNode node,double x,double y) {
+		if (node == null) {
+			return Double.MAX_VALUE;
+		}
     	//System.out.println((node.pt.x - x));
 		//System.out.println((node.pt.y - y));
-    	return Math.sqrt((node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y));
+    	return (node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y);
 	}
 
 
