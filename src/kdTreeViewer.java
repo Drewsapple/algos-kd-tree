@@ -16,6 +16,7 @@ public class kdTreeViewer extends JFrame {
         setTitle("KD Tree Visualizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
         drawArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

@@ -26,6 +26,39 @@ public class KDTree {
         	return add(this.root, x, y);
         }
     }
+    public KDNode nearestNode(double x,double y) {
+    	if (this.root == null) {
+    		return null;
+		} else {
+    		return nearestNode(this.root,x,y,this.root);
+		}
+	}
+
+	private KDNode nearestNode(KDNode node, double x,double y,KDNode nearest) {
+		boolean bigger = biggerThanNode(node,x,y);
+		double nearestDistance = getDistance(nearest,x,y);
+		if (bigger && node.bigger != null) {
+			if (nearestDistance > getDistance(node.bigger,x,y)) {
+				return nearestNode(node.bigger,x,y,node.bigger);
+			} else {
+				return nearestNode(node.bigger,x,y,nearest);
+			}
+		} else if (!bigger && node.smaller != null) {
+			if (nearestDistance > getDistance(node.bigger,x,y)) {
+				return nearestNode(node.smaller,x,y,node.smaller);
+			} else {
+				return nearestNode(node.smaller,x,y,nearest);
+			}
+		} else {
+			return nearest;
+		}
+	}
+
+	private double getDistance(KDNode node,double x,double y) {
+    	return Math.sqrt((node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y));
+	}
+
+
 
 	/**
 	 * Adds a point with coords x and y to our KDTree as a child of a specific node
