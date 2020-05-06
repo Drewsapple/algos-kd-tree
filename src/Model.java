@@ -1,25 +1,17 @@
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Model {
 	
     public KDTree tree;
-    public ArrayList<Point> points;
+    public Point2D.Double mousePoint;
+    public ArrayList<Point2D.Double> points;
 
     public Model(){
         tree = new KDTree();
-        points = new ArrayList<Point>();
-    }
-
-    public boolean addPoint(Point p){
-        if(points.contains(p)) {
-            return false;
-        }
-        else {
-            points.add(p);
-            return true;
-        }
+        points = new ArrayList<Point2D.Double>();
     }
 }
 

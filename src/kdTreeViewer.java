@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 
 public class kdTreeViewer extends JFrame {
     DrawArea drawArea;
@@ -24,7 +25,19 @@ public class kdTreeViewer extends JFrame {
                 int height = drawArea.getSize().height;
                 Point newPoint = e.getPoint();
                 m.tree.add(newPoint.x/(double)width, newPoint.y/(double)height);
-                drawArea.pointClicked(newPoint);
+                repaint();
+            }
+        });
+
+        drawArea.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                System.out.println("Mouse moved");
+                int width = drawArea.getSize().width;
+                int height = drawArea.getSize().height;
+                Point mouse = e.getPoint();
+                m.mousePoint = new Point2D.Double(mouse.x/(double)width, mouse.y/(double)height);
                 repaint();
             }
         });
