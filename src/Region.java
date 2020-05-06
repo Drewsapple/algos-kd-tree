@@ -17,7 +17,7 @@ public class Region{
          * since then we can use a much wider variety of values (something to think about)
          */
         public Region() {
-            this(new Point2D.Double(0, 0), new Point2D.Double(kdTreeViewer.HORIZONTAL_WINDOW_SIZE, kdTreeViewer.VERTICAL_WINDOW_SIZE));
+            this(new Point2D.Double(Double.MIN_VALUE, Double.MIN_VALUE), new Point2D.Double(Double.MAX_VALUE, Double.MAX_VALUE));
         }
         
     }

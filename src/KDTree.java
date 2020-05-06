@@ -17,7 +17,7 @@ public class KDTree {
      * @param y
      * @return return the node that was just added
      */
-    public KDNode add(int x, int y) {
+    public KDNode add(double x, double y) {
         if(this.root == null) {
             root = new KDNode(x,y, Orientation.VERTICAL, new Region());
             return root;
@@ -34,7 +34,7 @@ public class KDTree {
 	 * @param y
 	 * @return return the node that was just added
 	 */
-    public KDNode add(KDNode parentNode, int x, int y) {
+    public KDNode add(KDNode parentNode, double x, double y) {
     	boolean bigger = biggerThanNode(parentNode,x,y);
 		Region newRegion = parentNode.getSubRegion(bigger);
 		KDNode nodeAdded;
@@ -67,7 +67,7 @@ public class KDTree {
      * whether the point should be considered "bigger" (true) or smaller (false) with 
      * respect to the orientation of the node
      */
-    public boolean biggerThanNode(KDNode n, int x, int y) {
+    public boolean biggerThanNode(KDNode n, double x, double y) {
 		double newValue, existingValue;
     	if (n.orientation == Orientation.HORIZONTAL) {
 			newValue = y;

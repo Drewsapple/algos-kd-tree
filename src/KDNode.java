@@ -10,7 +10,7 @@ public class KDNode{
     KDNode smaller;
     KDNode bigger;
 
-    public KDNode(int x, int y, Orientation orient, Region region){
+    public KDNode(double x, double y, Orientation orient, Region region){
         pt = new Point2D.Double(x, y);
         orientation = orient;
         r = region;

@@ -21,18 +21,23 @@ public class DrawArea extends JPanel {
     private void drawPoints(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
+        int width = getSize().width;
+        int height = getSize().height;
         for(Point2D.Double p : m.tree.points()) {
             Dimension d = this.getSize();
-            g2d.fillRect((int)p.x-1, (int)p.y-1, 3,3);
+            g2d.fillRect((int)(p.x*(double)width)-1, (int)(p.y*(double)height)-1, 3,3);
         }
     }
     
     private void drawLines(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
+        int width = getSize().width;
+        int height = getSize().height;
+        System.out.printf("Window: width: %d height: %d \n", width, height);
         ArrayList<Line2D.Double> lines = m.tree.lines();
         for(Line2D.Double l :lines) {
-            g2d.drawLine((int)l.x1, (int)l.y1, (int)l.x2, (int)l.y2);
+            g2d.drawLine((int)(l.x1*width), (int)(l.y1*height), (int)(l.x2*width), (int)(l.y2*height));
         }
     }
 

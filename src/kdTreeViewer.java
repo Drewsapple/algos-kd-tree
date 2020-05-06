@@ -6,14 +6,13 @@ import java.awt.geom.Line2D;
 
 public class kdTreeViewer extends JFrame {
     DrawArea drawArea;
-    static int HORIZONTAL_WINDOW_SIZE = 400;
-    static int VERTICAL_WINDOW_SIZE = 400;
+    static int HORIZONTAL_WINDOW_SIZE = 600;
+    static int VERTICAL_WINDOW_SIZE = 600;
 
     public kdTreeViewer(Model m){
         drawArea = new DrawArea(m);
         add(drawArea);
         setSize(HORIZONTAL_WINDOW_SIZE,VERTICAL_WINDOW_SIZE);
-        setResizable(false);
         setTitle("KD Tree Visualizer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -21,8 +20,10 @@ public class kdTreeViewer extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                int width = drawArea.getSize().width;
+                int height = drawArea.getSize().height;
                 Point newPoint = e.getPoint();
-                m.tree.add(newPoint.x, newPoint.y);
+                m.tree.add(newPoint.x/(double)width, newPoint.y/(double)height);
                 drawArea.pointClicked(newPoint);
                 repaint();
             }
