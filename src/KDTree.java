@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class KDTree {
@@ -67,7 +68,7 @@ public class KDTree {
      * respect to the orientation of the node
      */
     public boolean biggerThanNode(KDNode n, int x, int y) {
-		int newValue, existingValue;
+		double newValue, existingValue;
     	if (n.orientation == Orientation.HORIZONTAL) {
 			newValue = y;
 			existingValue = n.pt.y;
@@ -94,13 +95,13 @@ public class KDTree {
 		}
 	}
 
-	public ArrayList<Point> points() {
-		ArrayList<Point> points = new ArrayList<Point>();
+	public ArrayList<Point2D.Double> points() {
+		ArrayList<Point2D.Double> points = new ArrayList<>();
 		points = points(root, points);
 		return points;
 	}
 
-	public ArrayList<Point> points(KDNode n, ArrayList<Point> points ) {
+	public ArrayList<Point2D.Double> points(KDNode n, ArrayList<Point2D.Double> points ) {
     	if(n != null) {
 			points = points(n.smaller, points);
 			points.add(n.pt);

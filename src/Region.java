@@ -1,13 +1,14 @@
-import java.awt.Point;
+import java.awt.geom.Point2D;
 
 public class Region{
-        public Point min, max;
-        public Region(Point min, Point max){
+        public Point2D.Double min, max;
+        public Region(Point2D.Double min, Point2D.Double max){
             this.min = min;
             this.max = max;
         }
-        public Region(int xmin, int ymin, int xmax, int ymax){
-            this(new Point(xmin, ymin), new Point(xmax, ymax));
+
+        public Region(double xmin, double ymin, double xmax, double ymax){
+            this(new Point2D.Double(xmin, ymin), new Point2D.Double(xmax, ymax));
         }
         
         /**
@@ -16,7 +17,7 @@ public class Region{
          * since then we can use a much wider variety of values (something to think about)
          */
         public Region() {
-            this(new Point(0, 0), new Point(kdTreeViewer.HORIZONTAL_WINDOW_SIZE, kdTreeViewer.VERTICAL_WINDOW_SIZE));
+            this(new Point2D.Double(0, 0), new Point2D.Double(kdTreeViewer.HORIZONTAL_WINDOW_SIZE, kdTreeViewer.VERTICAL_WINDOW_SIZE));
         }
         
     }

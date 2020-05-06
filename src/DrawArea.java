@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class DrawArea extends JPanel {
@@ -20,9 +21,9 @@ public class DrawArea extends JPanel {
     private void drawPoints(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
-        for(Point p : m.tree.points()) {
+        for(Point2D.Double p : m.tree.points()) {
             Dimension d = this.getSize();
-            g2d.fillRect(p.x-1, p.y-1, 2,2);
+            g2d.fillRect((int)p.x-1, (int)p.y-1, 2,2);
         }
     }
     
@@ -31,11 +32,7 @@ public class DrawArea extends JPanel {
         g2d.setColor(Color.black);
         ArrayList<Line2D.Double> lines = m.tree.lines();
         for(Line2D.Double l :lines) {
-            Dimension d = this.getSize();
-            g2d.drawLine((int)l.x1,
-                    (int) l.y1,
-                    (int)l.x2,
-                    (int) l.y2);
+            g2d.drawLine((int)l.x1, (int)l.y1, (int)l.x2, (int)l.y2);
         }
     }
 

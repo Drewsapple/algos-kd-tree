@@ -1,8 +1,9 @@
 import java.awt.Point;
+import java.awt.geom.Point2D;
 
 public class KDNode{
 
-    Point pt;
+    Point2D.Double pt;
     Orientation orientation;				//true for vertical, false for horizontal
     Region r;
 
@@ -10,7 +11,7 @@ public class KDNode{
     KDNode bigger;
 
     public KDNode(int x, int y, Orientation orient, Region region){
-        pt = new Point(x,y);
+        pt = new Point2D.Double(x, y);
         orientation = orient;
         r = region;
         smaller = null;
