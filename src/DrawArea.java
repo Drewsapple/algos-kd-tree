@@ -23,7 +23,7 @@ public class DrawArea extends JPanel {
         g2d.setColor(Color.black);
         for(Point2D.Double p : m.tree.points()) {
             Dimension d = this.getSize();
-            g2d.fillRect((int)p.x-1, (int)p.y-1, 2,2);
+            g2d.fillRect((int)p.x-1, (int)p.y-1, 3,3);
         }
     }
     
