@@ -40,24 +40,16 @@ public class KDTree {
 		}
 		
 		double rootDistance = getDistanceSqr(root, x, y);
-		KDNode closerNode = null;
-		KDNode fartherNode = null;
+		KDNode closerNode = root.smaller;
+		KDNode fartherNode = root.bigger;
 		
-		double biggerDistance = getDistanceSqr(root.bigger, x, y);
-		double smallerDistance = getDistanceSqr(root.smaller, x, y);
-		double closerDistance = Math.min(biggerDistance, smallerDistance);
-		
-		if (closerDistance == biggerDistance) {
+		if (biggerThanNode(root, x, y)) {
 			closerNode = root.bigger;
 			fartherNode = root.smaller;
 		}
-		else {
-			closerNode = root.smaller;
-			fartherNode = root.bigger;
-		}
 		
 		closerNode = nearestNode(closerNode, x, y);
-		closerDistance = getDistanceSqr(closerNode, x, y);
+		double closerDistance = getDistanceSqr(closerNode, x, y);
 		if (rootDistance <= closerDistance) {
 			closerDistance = rootDistance;
 			closerNode = root;

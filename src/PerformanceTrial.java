@@ -12,11 +12,11 @@ public class PerformanceTrial {
 	}
 	
 	public static long timeRandomKDQuery(KDTree tree) {
-		long start = System.currentTimeMillis();
+		long start = System.nanoTime();
 		double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
 		double y = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
 		tree.nearestNode(x, y);
-		long end = System.currentTimeMillis();
+		long end = System.nanoTime();
 		return end - start;
 	}
 	
@@ -24,18 +24,18 @@ public class PerformanceTrial {
 		System.out.println("KD Tree Trial -- average query time");
 		System.out.printf("%6s\t%12s\n", "N", "time (ms)");
 		
-		final int numRuns = 10;
-		final int numQueries = 100;
+		final long numRuns = 100;
+		final long numQueries = 1000;
 		
 		for (int n = 32; n <= 262144; n *= 2) {
-			long totalTimeMillis = 0;
+			long totalTimeNano = 0;
 			for (int run = 0; run < numRuns; run++) {
 				KDTree tree = randomKDTree(n);
 				for (int query = 0; query < numQueries; query++) {
-					totalTimeMillis += timeRandomKDQuery(tree);
+					totalTimeNano += timeRandomKDQuery(tree);
 				}
 			}
-			double averageTimeMillis = (double) totalTimeMillis / (numRuns * numQueries);
+			double averageTimeMillis = (double) totalTimeNano / (numRuns * numQueries * 1000000);
 			System.out.printf("%6d\t%12f\n", n, averageTimeMillis);
 		}
 		
@@ -78,11 +78,11 @@ public class PerformanceTrial {
 	}
 	
 	public static long timeRandomBruteQuery(KDTree tree) {
-		long start = System.currentTimeMillis();
+		long start = System.nanoTime();
 		double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
 		double y = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
 		bruteForceQuery(tree, x, y);
-		long end = System.currentTimeMillis();
+		long end = System.nanoTime();
 		return end - start;
 	}
 	
@@ -90,18 +90,18 @@ public class PerformanceTrial {
 		System.out.println("Brute Force Trial -- average query time");
 		System.out.printf("%6s\t%12s\n", "N", "time (ms)");
 		
-		final int numRuns = 10;
-		final int numQueries = 100;
+		final long numRuns = 10;
+		final long numQueries = 100;
 		
 		for (int n = 32; n <= 262144; n *= 2) {
-			long totalTimeMillis = 0;
+			long totalTimeNano = 0;
 			for (int run = 0; run < numRuns; run++) {
 				KDTree tree = randomKDTree(n);
 				for (int query = 0; query < numQueries; query++) {
-					totalTimeMillis += timeRandomBruteQuery(tree);
+					totalTimeNano += timeRandomBruteQuery(tree);
 				}
 			}
-			double averageTimeMillis = (double) totalTimeMillis / (numRuns * numQueries);
+			double averageTimeMillis = (double) totalTimeNano / (numRuns * numQueries * 1000000);
 			System.out.printf("%6d\t%12f\n", n, averageTimeMillis);
 		}
 		
