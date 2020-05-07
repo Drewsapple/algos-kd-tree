@@ -5,10 +5,16 @@ import java.util.ArrayList;
 
 public class KDTree {
 	//In which direction the Node divides the plot (in which direction we draw the line)
-
+	int countRecursive;
+	int countGetDist;				//for both getDistanceSqr and getDistanceSqrToPartition
+	int countComparison;
+	
+	
     KDNode root;
     public KDTree(){
-
+    	countGetDist = 0;
+    	countComparison = 0;
+    	countRecursive = 0;
     }
 
     /**
@@ -27,6 +33,9 @@ public class KDTree {
         }
     }
     public KDNode nearestNode(double x,double y) {
+    	countRecursive = 0;
+    	countComparison = 0;
+    	countGetDist = 0;
     	if (this.root == null) {
     		return null;
 		} else {
@@ -35,6 +44,7 @@ public class KDTree {
 	}
 
 	private KDNode nearestNode(KDNode root, double x, double y) {
+		++countRecursive;
 		if (root == null) {
 			return null;
 		}
@@ -67,6 +77,7 @@ public class KDTree {
 	}
 	
 	private double getDistanceSqrToPartition(KDNode root, double x, double y) {
+		++countGetDist;
 		if (root == null) {
 			return Double.MAX_VALUE;
 		}
@@ -77,6 +88,7 @@ public class KDTree {
 	}
 
 	private double getDistanceSqr(KDNode node,double x,double y) {
+		++countGetDist;
 		if (node == null) {
 			return Double.MAX_VALUE;
 		}
@@ -129,6 +141,7 @@ public class KDTree {
      * respect to the orientation of the node
      */
     public boolean biggerThanNode(KDNode n, double x, double y) {
+    	++countComparison;
 		double newValue, existingValue;
     	if (n.orientation == Orientation.HORIZONTAL) {
 			newValue = y;
