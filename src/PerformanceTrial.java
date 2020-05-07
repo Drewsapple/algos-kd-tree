@@ -88,7 +88,7 @@ public class PerformanceTrial {
 
 		return new long[] {time , bruteForceQuery(points, x, y)};
 	}
-	
+	//
 	public static void bruteForceTrial() {
 		System.out.println("Brute Force Trial -- average for nearest neighor querry");
 		System.out.printf("%6s\t%12s\t%12s\n", "N", "time (ms)", "GetDistance calls");

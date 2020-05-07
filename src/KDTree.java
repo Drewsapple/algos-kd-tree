@@ -75,7 +75,7 @@ public class KDTree {
 		}
 		return fartherNode;
 	}
-	
+	//
 	private double getDistanceSqrToPartition(KDNode root, double x, double y) {
 		++countGetDist;
 		if (root == null) {
