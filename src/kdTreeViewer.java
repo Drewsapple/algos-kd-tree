@@ -5,6 +5,9 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
+/**
+ * Used to graphically represent our KDTree
+ */
 public class kdTreeViewer extends JFrame {
     DrawArea drawArea;
     static int HORIZONTAL_WINDOW_SIZE = 600;
@@ -34,7 +37,6 @@ public class kdTreeViewer extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                //System.out.println("Mouse moved");
                 int width = drawArea.getSize().width;
                 int height = drawArea.getSize().height;
                 Point mouse = e.getPoint();

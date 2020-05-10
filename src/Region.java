@@ -1,5 +1,8 @@
 import java.awt.geom.Point2D;
 
+/**
+ * Region which a KDNode partitions 
+ */
 public class Region{
         public Point2D.Double min, max;
         public Region(Point2D.Double min, Point2D.Double max){

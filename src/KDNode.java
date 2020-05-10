@@ -1,10 +1,13 @@
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+/**
+ * A node inside a KD Tree
+ */
 public class KDNode{
 
     Point2D.Double pt;
-    Orientation orientation;				//true for vertical, false for horizontal
+    Orientation orientation;			
     Region r;
 
     KDNode smaller;
@@ -18,6 +21,10 @@ public class KDNode{
         bigger = null;
     }
 
+    /**
+     * Returns the region of a child depending if the child is greater or smaller with respect
+     * to the parent's partitioning orientation
+     */
     public Region getSubRegion(boolean bigger) {
         Region newRegion;
         switch (orientation) {

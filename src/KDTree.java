@@ -32,6 +32,48 @@ public class KDTree {
         	return add(this.root, x, y);
         }
     }
+    
+	/**
+	 * Adds a point with coords x and y to our KDTree and returns the newly created node
+	 * @param parentNode
+	 * @param x
+	 * @param y
+	 * @return return the node that was just added
+	 */
+    public KDNode add(KDNode parentNode, double x, double y) {
+    	boolean bigger = biggerThanNode(parentNode,x,y);
+		Region newRegion = parentNode.getSubRegion(bigger);
+		KDNode nodeAdded;
+    	//base case checks if a new node is to be added
+    	//it checks whether the bigger and smaller subTrees are null and checks if the corresponding
+    	//coordinate justifies adding the new point as the bigger or smaller subtree
+
+    	if (bigger && parentNode.bigger == null) {
+    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
+    		parentNode.bigger = nodeAdded;
+    		return nodeAdded;
+    	}
+    	else if (!bigger && parentNode.smaller == null) {
+    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
+    		parentNode.smaller = nodeAdded;
+    		return nodeAdded;
+		}
+    	// now to the recursive case:
+    	// we just have to see to which on which subtree to call the recursion on 
+    	if (bigger) {			
+    		return add(parentNode.bigger, x, y);
+    	}
+    	else {
+    		return add(parentNode.smaller,x, y);
+    	}
+    }
+    
+    /**
+     * Returns the node in our KDTree whose coordinates are closest to coordinates x and y
+     * @param x
+     * @param y
+     * @return
+     */
     public KDNode nearestNode(double x,double y) {
     	countRecursive = 0;
     	countComparison = 0;
@@ -75,7 +117,15 @@ public class KDTree {
 		}
 		return fartherNode;
 	}
-	//
+	
+	/**
+	 * Returns the distance squared from the region bounded by root to coordinates x and y
+	 * with respect to the roots partitioning orientation
+	 * @param root
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private double getDistanceSqrToPartition(KDNode root, double x, double y) {
 		++countGetDist;
 		if (root == null) {
@@ -87,57 +137,28 @@ public class KDTree {
 		return (root.pt.y - y)*(root.pt.y - y);
 	}
 
+	/**
+	 * Returns the distance squared from node to coordinates x and y
+	 * @param node
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private double getDistanceSqr(KDNode node,double x,double y) {
 		++countGetDist;
 		if (node == null) {
 			return Double.MAX_VALUE;
 		}
-    	//System.out.println((node.pt.x - x));
-		//System.out.println((node.pt.y - y));
     	return (node.pt.x - x) * (node.pt.x - x) + (node.pt.y - y) * (node.pt.y - y);
 	}
 
 
 
-	/**
-	 * Adds a point with coords x and y to our KDTree as a child of a specific node
-	 * @param parentNode
-	 * @param x
-	 * @param y
-	 * @return return the node that was just added
-	 */
-    public KDNode add(KDNode parentNode, double x, double y) {
-    	boolean bigger = biggerThanNode(parentNode,x,y);
-		Region newRegion = parentNode.getSubRegion(bigger);
-		KDNode nodeAdded;
-    	//base case checks if a new node is to be added
-    	//it checks whether the bigger and smaller subTrees are null and checks if the corresponding
-    	//coordinate justifies adding the new point as the bigger or smaller subtree
 
-    	if (bigger && parentNode.bigger == null) {
-    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
-    		parentNode.bigger = nodeAdded;
-    		return nodeAdded;
-    	}
-    	else if (!bigger && parentNode.smaller == null) {
-    		nodeAdded = new KDNode(x,y, flipOrientation(parentNode.orientation), newRegion);
-    		parentNode.smaller = nodeAdded;
-    		return nodeAdded;
-		}
-    	
-    	// now to the recursive case:
-    	// we just have to see to which on which subtree to call the recursion on 
-    	if (bigger) {			
-    		return add(parentNode.bigger, x, y);
-    	}
-    	else {
-    		return add(parentNode.smaller,x, y);
-    	}
-    }
     
     /**
-     * Given a Node in a particular orientation, and a points coordinates, determine
-     * whether the point should be considered "bigger" (true) or smaller (false) with 
+     * Given a Node in a particular partitioning orientation, and a point's coordinates, determine
+     * whether the point should be considered a "bigger" (true) or smaller (false) child with 
      * respect to the orientation of the node
      */
     public boolean biggerThanNode(KDNode n, double x, double y) {
@@ -151,15 +172,15 @@ public class KDTree {
 			newValue = x;
 			existingValue = n.pt.x;
     	}
-
-		if (newValue > existingValue) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		if (newValue > existingValue) {return true;}
+		else {return false;	}
     }
-
+    
+    /**
+     * Given an orientation Horizontal or Vertical, flip it so it is the opposite
+     * @param o
+     * @return
+     */
     public Orientation flipOrientation(Orientation o) {
     	if(o == Orientation.HORIZONTAL){
     		return Orientation.VERTICAL;
