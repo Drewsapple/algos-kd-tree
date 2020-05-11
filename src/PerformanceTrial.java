@@ -23,7 +23,7 @@ public class PerformanceTrial {
 
 		double start;
 		double end;
-		for (int n = 32;n <= 262144;n *= 2) {
+		for (int n = 32;n <= 4096;n *= 2) {
 			double averageWorstCaseTime = 0;
 			double averageWorstCaseAddCalls = 0;
 			double averageWorstCaseBiggerThanNodeCalls = 0;
