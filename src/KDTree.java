@@ -8,7 +8,8 @@ public class KDTree {
 	int countRecursive;
 	int countGetDist;				//for both getDistanceSqr and getDistanceSqrToPartition
 	int countComparison;
-	
+	int countAdd;
+	int countBiggerThanNode;
 	
     KDNode root;
     public KDTree(){
@@ -24,11 +25,14 @@ public class KDTree {
      * @return return the node that was just added
      */
     public KDNode add(double x, double y) {
+		countAdd = 0;
+		countBiggerThanNode = 0;
         if(this.root == null) {
             root = new KDNode(x,y, Orientation.VERTICAL, new Region());
             return root;
         }
         else {
+        	countAdd++;
         	return add(this.root, x, y);
         }
     }
@@ -41,6 +45,7 @@ public class KDTree {
 	 * @return return the node that was just added
 	 */
     public KDNode add(KDNode parentNode, double x, double y) {
+		countBiggerThanNode++;
     	boolean bigger = biggerThanNode(parentNode,x,y);
 		Region newRegion = parentNode.getSubRegion(bigger);
 		KDNode nodeAdded;
@@ -60,10 +65,12 @@ public class KDTree {
 		}
     	// now to the recursive case:
     	// we just have to see to which on which subtree to call the recursion on 
-    	if (bigger) {			
+    	if (bigger) {
+			countAdd++;
     		return add(parentNode.bigger, x, y);
     	}
     	else {
+			countAdd++;
     		return add(parentNode.smaller,x, y);
     	}
     }

@@ -14,6 +14,7 @@ public class kdTreeViewer extends JFrame {
     static int VERTICAL_WINDOW_SIZE = 600;
 
     public kdTreeViewer(Model m){
+
         drawArea = new DrawArea(m);
         add(drawArea);
         setSize(HORIZONTAL_WINDOW_SIZE,VERTICAL_WINDOW_SIZE);

@@ -16,7 +16,57 @@ public class PerformanceTrial {
 		}
 		return tree;
 	}
-	
+
+	public static void worstCaseInsertionTrial() {
+		System.out.println("KD Tree Insertion Trial -- average stats to add N points");
+		System.out.printf("%6s\t%32s\t%32s\t%32s\t%32s\n", "N", "worst case time (ms)","random case time (ms)","worst case recursive calls","random case recursive calls");
+
+		double start;
+		double end;
+		for (int n = 32;n <= 262144;n *= 2) {
+			double averageWorstCaseTime = 0;
+			double averageWorstCaseAddCalls = 0;
+			double averageWorstCaseBiggerThanNodeCalls = 0;
+			double averageRandomCaseTime = 0;
+			double averageRandomCaseAddCalls = 0;
+			double averageRandomCaseBiggerThanNodeCalls = 0;
+			for (int i = 0;i < numRuns;i++) {
+				double[][] randomPoints= randomPoints(n);
+				KDTree tree = new KDTree();
+				start = System.nanoTime();
+				for (int k = 0;k < n;k++) {
+					tree.add(randomPoints[k][0],randomPoints[k][1]);
+					averageRandomCaseAddCalls += tree.countAdd;
+					averageRandomCaseBiggerThanNodeCalls += tree.countBiggerThanNode;
+				}
+				end = System.nanoTime();
+				averageRandomCaseTime += end - start;
+				tree = new KDTree();
+				double[][] randomWorstCasePoints = worstCasePoints(n);
+				start = System.nanoTime();
+				for (int k = 0;k < n;k++) {
+					tree.add(randomWorstCasePoints[k][0],randomWorstCasePoints[k][1]);
+					averageWorstCaseAddCalls += tree.countAdd;
+					averageWorstCaseBiggerThanNodeCalls += tree.countBiggerThanNode;
+				}
+				end = System.nanoTime();
+				averageWorstCaseTime += end - start;
+			}
+			averageRandomCaseTime /= numRuns * 1000000;
+			averageWorstCaseTime /= numRuns * 1000000;
+			averageRandomCaseAddCalls /= numRuns ;
+			averageRandomCaseBiggerThanNodeCalls /= numRuns;
+			averageWorstCaseAddCalls /= numRuns ;
+			averageWorstCaseBiggerThanNodeCalls /= numRuns;
+
+			System.out.printf("%6d\t%32f\t%32f\t%32f\t%32f\n", n, averageWorstCaseTime,averageRandomCaseTime,averageWorstCaseAddCalls,averageRandomCaseAddCalls);
+		}
+
+
+	}
+
+
+
 	public static long[] timeRandomKDQuery(KDTree tree) {
 		long start = System.nanoTime();
 		double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
@@ -64,6 +114,16 @@ public class PerformanceTrial {
 		for (int i = 0; i < n; i++) {
 			points[i][0] = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
 			points[i][1] = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
+		}
+		return points;
+	}
+
+	private static double[][] worstCasePoints(int n) {
+		double[][] points = new double[n][2];
+
+		for (int i = 0; i < n; i++) {
+			points[i][0] = i * ((double)kdTreeViewer.HORIZONTAL_WINDOW_SIZE / n);
+			points[i][1] = i * ((double)kdTreeViewer.HORIZONTAL_WINDOW_SIZE / n);
 		}
 		return points;
 	}
@@ -115,6 +175,7 @@ public class PerformanceTrial {
 	}
 
 	public static void main(String[] args) {
+		worstCaseInsertionTrial();
 		kdTreeTrial();
 		bruteForceTrial();
 	}
