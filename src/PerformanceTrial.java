@@ -10,8 +10,8 @@ public class PerformanceTrial {
 	public static KDTree randomKDTree(int n) {
 		KDTree tree = new KDTree();
 		for (int i = 0; i < n; i++) {
-			double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
-			double y = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
+			double x = Math.random();
+			double y = Math.random() ;
 			tree.add(x, y);
 		}
 		return tree;
@@ -37,7 +37,6 @@ public class PerformanceTrial {
 				for (int k = 0;k < n;k++) {
 					tree.add(randomPoints[k][0],randomPoints[k][1]);
 					averageRandomCaseAddCalls += tree.countAdd;
-					averageRandomCaseBiggerThanNodeCalls += tree.countBiggerThanNode;
 				}
 				end = System.nanoTime();
 				averageRandomCaseTime += end - start;
@@ -47,7 +46,6 @@ public class PerformanceTrial {
 				for (int k = 0;k < n;k++) {
 					tree.add(randomWorstCasePoints[k][0],randomWorstCasePoints[k][1]);
 					averageWorstCaseAddCalls += tree.countAdd;
-					averageWorstCaseBiggerThanNodeCalls += tree.countBiggerThanNode;
 				}
 				end = System.nanoTime();
 				averageWorstCaseTime += end - start;
@@ -69,8 +67,8 @@ public class PerformanceTrial {
 
 	public static long[] timeRandomKDQuery(KDTree tree) {
 		long start = System.nanoTime();
-		double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
-		double y = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
+		double x = Math.random();
+		double y = Math.random();
 		tree.nearestNode(x, y);
 		long time = System.nanoTime() - start;
 		return new long[] {time, tree.countRecursive, tree.countComparison, tree.countGetDist};
@@ -112,8 +110,8 @@ public class PerformanceTrial {
 	public static double[][] randomPoints(int n){
 		double[][] points = new double[n][2];
 		for (int i = 0; i < n; i++) {
-			points[i][0] = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
-			points[i][1] = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
+			points[i][0] = Math.random();
+			points[i][1] = Math.random();
 		}
 		return points;
 	}
@@ -122,8 +120,8 @@ public class PerformanceTrial {
 		double[][] points = new double[n][2];
 
 		for (int i = 0; i < n; i++) {
-			points[i][0] = i * ((double)kdTreeViewer.HORIZONTAL_WINDOW_SIZE / n);
-			points[i][1] = i * ((double)kdTreeViewer.HORIZONTAL_WINDOW_SIZE / n);
+			points[i][0] = i  / n;
+			points[i][1] = i  / n;
 		}
 		return points;
 	}
@@ -144,11 +142,12 @@ public class PerformanceTrial {
 	
 	public static long[] timeRandomBruteQuery(double[][] points) {
 		long start = System.nanoTime();
-		double x = Math.random() * kdTreeViewer.HORIZONTAL_WINDOW_SIZE;
-		double y = Math.random() * kdTreeViewer.VERTICAL_WINDOW_SIZE;
+		double x = Math.random();
+		double y = Math.random();
+		long bfq = bruteForceQuery(points, x, y);
 		long time = System.nanoTime() - start;
 
-		return new long[] {time , bruteForceQuery(points, x, y)};
+		return new long[] {time , bfq};
 	}
 	
 	public static void bruteForceTrial() {
@@ -162,8 +161,8 @@ public class PerformanceTrial {
 				double[][] points = randomPoints(n);
 				for (int query = 0; query < numQueries; query++) {
 					long[] data = timeRandomBruteQuery(points);
-					totalTimeNano += timeRandomBruteQuery(points)[0];
-					totalGetDist += timeRandomBruteQuery(points)[1];
+					totalTimeNano += data[0];
+					totalGetDist += data[1];
 				}
 			}
 			double averageTimeMillis = (double) totalTimeNano / (numRuns * numQueries * 1000000);
